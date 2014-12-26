@@ -45,6 +45,7 @@ import qualified Data.ByteString as B
 import Foreign
 import Foreign.C.String
 import Foreign.C.Types
+import System.IO.Unsafe (unsafePerformIO)
 
 #include <crypt.h>
 

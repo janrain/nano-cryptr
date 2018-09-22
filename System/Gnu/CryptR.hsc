@@ -45,7 +45,7 @@ import qualified Data.ByteString as B
 import Foreign
 import Foreign.C.String
 import Foreign.C.Types
-import System.IO.Unsafe (unsafePerformIO)
+import qualified System.IO.Unsafe as Unsafe
 
 #include <crypt.h>
 
@@ -84,7 +84,7 @@ newCryptData = do
 cryptRIO :: CryptData -- ^ the 'CryptData' to use as scratch space
          -> B.ByteString -- ^ the @key@ value as described by @crypt_r@
          -> B.ByteString -- ^ the @salt@ value as described by @crypt_r@
-         -> IO B.ByteString -- ^ the result of the call to @crypt_r@
+         -> IO (Maybe B.ByteString) -- ^ the result of the call to @crypt_r@
 cryptRIO (CD mvar) key salt = withMVar mvar (`withForeignPtr` crypt key salt)
 
 
@@ -96,18 +96,23 @@ cryptRIO (CD mvar) key salt = withMVar mvar (`withForeignPtr` crypt key salt)
 -- using 'newCryptData' followed by multiple uses of 'cryptRIO'.  This
 -- is provided as a convenience function when the overhead is not as
 -- important as the simplicity of this interface.
+--
+-- Because @crypt_r@ may fail (for example, when given an invalid salt), this
+-- function returns a 'Maybe ByteString'.
 cryptR :: B.ByteString -- ^ the @key@ value as described in @crypt_r@
        -> B.ByteString -- ^ the @salt@ value as described in @crypt_r@
-       -> B.ByteString -- ^ the result of the call to @crypt_r@
-cryptR key salt = unsafePerformIO $ do
+       -> Maybe B.ByteString -- ^ the result of the call to @crypt_r@
+cryptR key salt = Unsafe.unsafePerformIO $ do
     allocaBytes #{size struct crypt_data} $ \ptr -> do
         #{poke struct crypt_data, initialized} ptr (0 :: CInt)
         crypt key salt ptr
 
 
 -- Common implementation guts
-crypt :: B.ByteString -> B.ByteString -> Ptr CDOpaque -> IO B.ByteString
+crypt :: B.ByteString -> B.ByteString -> Ptr CDOpaque -> IO (Maybe B.ByteString)
 crypt key salt ptr = do
     B.useAsCString key $ \k -> B.useAsCString salt $ \s -> do
         crypted <- crypt_r k s ptr
-        B.packCString crypted
+        if crypted /= nullPtr
+           then Just `fmap` B.packCString crypted
+           else return Nothing

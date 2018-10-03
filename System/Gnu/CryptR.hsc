@@ -1,36 +1,35 @@
 {-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls #-}
 -- | This package wraps @glibc@'s @crypt_r@ function in a thread-safe manner.
 --
--- @
--- $ ghci -XOverloadedStrings
--- GHCi, version 6.12.3: http://www.haskell.org/ghc/  :? for help
--- Loading package ghc-prim ... linking ... done.
--- Loading package integer-gmp ... linking ... done.
--- Loading package base ... linking ... done.
--- Loading package ffi-1.0 ... linking ... done.
--- Prelude> :m + System.Gnu.CryptR Data.ByteString.Char8
--- Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptR' \"password\" \"l3\"
--- Loading package bytestring-0.9.1.7 ... linking ... done.
--- Loading package nano-cryptr-0.1.1.1 ... linking ... done.
--- \"l3vmImyenGFYg\"
--- Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptR' \"password1\" \"l3vmImyenGFYg\"
--- \"l3vmImyenGFYg\"
--- Prelude System.Gnu.CryptR Data.ByteString.Char8> x <- 'newCryptData'
--- Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x  \"password1\" \"l3vmImyenGFYg\"
--- \"l3vmImyenGFYg\"
--- Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"xpassword\" \"l3vmImyenGFYg\"
--- \"l3odRN01x86RU\"
--- Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"password\" \"l3vmImyenGFYg\"
--- \"l3vmImyenGFYg\"
--- Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"password\" \"$1$grufal$\"
--- \"$1$grufal$KyfLpXJJ32ZZw9EqqMSav1\"
--- Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"password1\" \"$1$grufal$\"
--- \"$1$grufal$xi8N0nP2Fl22TxyW68uvV.\"
--- Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"password1\" \"$1$grufal$KyfLpXJJ32ZZw9EqqMSav1\"
--- \"$1$grufal$xi8N0nP2Fl22TxyW68uvV.\"
--- Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"password\" \"$1$grufal$KyfLpXJJ32ZZw9EqqMSav1\"
--- \"$1$grufal$KyfLpXJJ32ZZw9EqqMSav1\"
--- @
+-- > $ ghci -XOverloadedStrings
+-- > GHCi, version 6.12.3: http://www.haskell.org/ghc/  :? for help
+-- > Loading package ghc-prim ... linking ... done.
+-- > Loading package integer-gmp ... linking ... done.
+-- > Loading package base ... linking ... done.
+-- > Loading package ffi-1.0 ... linking ... done.
+-- > Prelude> :m + System.Gnu.CryptR Data.ByteString.Char8
+-- > Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptR' \"password\" \"l3\"
+-- > Loading package bytestring-0.9.1.7 ... linking ... done.
+-- > Loading package nano-cryptr-0.1.1.1 ... linking ... done.
+-- > \"l3vmImyenGFYg\"
+-- > Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptR' \"password1\" \"l3vmImyenGFYg\"
+-- > \"l3vmImyenGFYg\"
+-- > Prelude System.Gnu.CryptR Data.ByteString.Char8> x <- 'newCryptData'
+-- > Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x  \"password1\" \"l3vmImyenGFYg\"
+-- > \"l3vmImyenGFYg\"
+-- > Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"xpassword\" \"l3vmImyenGFYg\"
+-- > \"l3odRN01x86RU\"
+-- > Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"password\" \"l3vmImyenGFYg\"
+-- > \"l3vmImyenGFYg\"
+-- > Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"password\" \"$1$grufal$\"
+-- > \"$1$grufal$KyfLpXJJ32ZZw9EqqMSav1\"
+-- > Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"password1\" \"$1$grufal$\"
+-- > \"$1$grufal$xi8N0nP2Fl22TxyW68uvV.\"
+-- > Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"password1\" \"$1$grufal$KyfLpXJJ32ZZw9EqqMSav1\"
+-- > \"$1$grufal$xi8N0nP2Fl22TxyW68uvV.\"
+-- > Prelude System.Gnu.CryptR Data.ByteString.Char8> 'cryptRIO' x \"password\" \"$1$grufal$KyfLpXJJ32ZZw9EqqMSav1\"
+-- > \"$1$grufal$KyfLpXJJ32ZZw9EqqMSav1\"
+
 module System.Gnu.CryptR
        ( CryptData
        , newCryptData

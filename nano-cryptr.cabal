@@ -12,6 +12,7 @@ Build-type:          Simple
 Cabal-version:       >=1.8
 Description:
   This package wraps @glibc@'s @crypt_r@ function in a thread-safe manner.
+Tested-With:         GHC == 7.6.3, GHC == 7.8.4, GHC == 7.10.3
 
 Library
   Exposed-modules:     System.Gnu.CryptR

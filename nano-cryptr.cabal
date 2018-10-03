@@ -37,6 +37,6 @@ Test-Suite unit-tests
     , test-framework-quickcheck2
 
 -------------------------------------------------------------------------------
-Source-repository this
-  type:              git
-  location:          https://github.com/janrain/nano-cryptr.git
+Source-repository      head
+  type:                git
+  location:            https://github.com/janrain/nano-cryptr.git

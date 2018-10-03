@@ -6,7 +6,7 @@ License-file:        LICENSE
 Author:              Carl Howells
 Maintainer:          engineering@janrain.com, chowells79@gmail.com
 Copyright:           Carl Howells, 2010
-Homepage:            http://github.com/janrain/nano-cryptr
+Homepage:            https://github.com/janrain/nano-cryptr
 Category:            System
 Build-type:          Simple
 Cabal-version:       >=1.8
